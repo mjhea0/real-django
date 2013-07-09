@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+ <html lang="en">
+   <head>
+     <meta charset="utf-8">
+     <title>Setting up a Django Project for the Non-Programmer</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <meta name="description" content="Setting up a Django Project for the Non-Programmer">
+     <meta name="author" content="Michael Herman">
+
+     <!-- Le styles -->
+     <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+      <style>
+
+          .jumbotron {
+            margin: 40px 0;
+            text-align: center;
+          }
+          .jumbotron h1 {
+            font-size: 60px;
+            line-height: 1;
+          }
+          .jumbotron .lead {
+            font-size: 23px;
+            line-height: 1.25;
+          }
+          .jumbotron .twitter_account {
+            font-size: 18px;
+            line-height: 1.25;
+          }
+          .jumbotron .btn {
+            font-size: 21px;
+            padding: 14px 24px;
+          }
+       
+     </style>
+     <link href="http://twitter.github.io/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+
+     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+     <!--[if lt IE 9]>
+       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+     <![endif]-->
+     <script src="http://twitter.github.io/bootstrap/assets/js/jquery-1.8.1.min.js" type="text/javascript"></script>
+     {% block extrahead %}
+     {% endblock %}
+     <script type="text/javascript">
+     $(function(){
+     {% block jquery %}
+     {% endblock %}
+     });
+     </script>
+   </head>
+
+   <body>
+
+  
+     <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="http://www.realpython.com">Real Python!</a></h3>
+      </div>
+      <!-- Jumbotron -->
+      <div class="jumbotron">
+        <h1>Setting up a Django Project <br/>for the Non-Programmer</h1>
+        <p class="lead">Or, as a gentle reminder for <em>the</em> programmer.</p>
+        
+        <a href="https://twitter.com/RealPython" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @RealPython</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+        </script>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://twitter.com/intent/tweet?screen_name=RealPython" class="twitter-mention-button" data-size="large">Send us a Tweet to @RealPython</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+        </script>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://django.realpython.com" data-text="Django for the Non-Programmer #realpython -" data-size="large">Share!</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+        </script>
+      </div>
+      <hr>
+      
+
+     {% load markdown_deux_tags %}
+
+{% markdown %}
+
+
+**This tutorial answers the question, *"How do I setup a Django project from scratch?"*. Since you're reading this, I assume (I hope, at least) you know that Django is a Python web framework built for rapid web development. We'll go through the setup process on both Windows and Unix environments, detailing the basic installation procedures of Django v1.5 and the dependencies required as well as a few additional libraries/extensions to get you started developing ASAP.**
+
+We'll also look at a basic workflow you can use as soon as your project structure is setup.
+
+Finally, you'll set up up your first project!
+
+*Check out the accompanying videos (only one is done at this point):*
+
+- [Setting up a Django Project - part 1 (setup)](http://youtu.be/D0MoGRZRtcA)
+- [Setting up a Django Project - part 2 (creating an app)](http://youtu.be/EuOJRop5aBE)
+
+## Requirements
+
+You should have some Python experience and know basic terminal (Unix) or PowerShell commands (Windows). If you've never used the command line before, please familiarize yourself with the following commands:
+
+![image](http://content.screencast.com/users/Mike_Extentech/folders/Jing/media/dba3bf60-21ab-439e-a997-2f801cda7ade/00000175.png)
+
+For simplicity, all examples use the Unix-style prompt:
+
+    $ python manage.py runserver
+    
+(The dollar sign is not part of the command.)
+
+Windows equivalent:
+
+    C:\> python manage.py runserver
+    
+Also, in a Unix environment, you may need to add `sudo` to each command:
+
+    $ sudo python manage.py runserver
+
+Sudo simply allows regular users to run commands with admin privileges, which modifies the system for all users. You will need to use your admin password.
+
+
+## What you need for a basic dev environment:
+
+1. Python 2.7.x
+2. easy_install and pip
+3. Git 1.7/1.8
+4. virtualenv
+5. Django
+6. Database (SQLite, MySQL, PostgreSQL)
+7. South
+8. Text editor (Sublime, vim, Komodo, gedit)
+
+### Python
+
+**Unix**
+
+Unix environments come pre-installed with Python. To check check your Python version, run the command:
+
+    $ python -V
+
+If you already have a 2.7.x version, move on to the next step. If not, [download](http://python.org/download/) and install the latest 2.7.x version
+
+**Windows**
+
+Unfortunately, if you're using Windows, you will have to install Python from scratch. Start by downloading Python 2.7.5 from the official Python [website](http://www.python.org/getit/). The Windows version is distributed as a MSI package. Once downloaded, double-click the file to install. By default this will install Python to C:\Python2.7.
+
+You also need to add Python to your PATH environmental variables, so when you want to run a Python script, you do not have to type the full path each and every time, as this is quite tedious. Since you downloaded Python version 2.7.5, you need to add the add the following directories to your PATH:
+
+    C:\Python27\
+    C:\Python27\Scripts\
+    C:\PYTHON27\DLLs\
+    C:\PYTHON27\LIB\
+
+Open your PowerShell and run the following command:
+
+    [Environment]::SetEnvironmentVariable("Path", "$env:Path;C:\Python27\;C:\Python27\Scripts\;C:\PYTHON27\DLLs\;C:\PYTHON27\LIB\;", "User")
+
+To test to make sure Python was installed correctly open your command prompt and then type python to load the Shell. You should see something like:
+
+    Python 2.7.5 (v2.7.5:026ee0057e2d, Jun  6 2013, 11:43:10) 
+    [MSC v.1500 32 bit (Intel)] on win32
+    Type “help”, “copyright”, “credits” or “license” for more information.
+    >>>
+    
+If you get a command not found error, then there's probably something wrong with your PATH/environmental variables.Please watch the video [here](http://youtu.be/ZvugV4Jd_sc) for assistance. Thanks!
+
+Press CRTL-D to exit the Shell. 
+
+### easy_install and pip
+
+Both easy_install and pip are Python Package Managers, which make it *much* easier to install and upgrade Python packages (and package dependencies).
+
+To download easy_install, go to the [Python Package Index](https://pypi.python.org/pypi/setuptools) (PyPI). You need to download setuptools, which includes easy_install. Download the executable (.exe) file for Windows, or the package egg (.egg) for Unix. You can install it directly from the file.
+
+Pip, meanwhile, is a wrapper that relies on easy_install, so you must have easy_install setup and working first before you can install pip. Once easy_install is setup, run the following command to install pip:
+
+    $ easy_install pip
+    
+You can follow along on this video [here](http://youtu.be/MIHYflJwyLk) for assistance
+
+### Git
+
+For [version control](http://git-scm.com/book/en/Getting-Started-About-Version-Control), we'll be using git. You can check your current version, if you have git already installed, with the following command:
+
+    $ git --version
+
+If you do not have either 1.7.x or 1.8.x installed, [download](http://git-scm.com/download) the latest version.
+
+### MySQL
+
+SQLite comes pre-installed with Python, so let's look at how to set up MySQL.
+
+First, install MySQL from [here](http://dev.mysql.com/doc/refman/5.7/en/installing.html).
+
+Next, start the server, and then setup a new database and a user:
+  
+    $ mysql.server start 
+    $ mysql -u root -p
+    Enter password: 
+    Welcome to the MySQL monitor.  Commands end with ; or \g.
+    Your MySQL connection id is 1
+    Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+    mysql>
+    mysql> CREATE DATABASE django_db;
+    Query OK, 1 row affected (0.01 sec)
+    mysql>
+    mysql> quit
+    Bye
+
+### virtualenv
+
+It's common practice to use a [virtualenv](http://www.virtualenv.org/en/latest/) (virtual environment) for your Python projects, which is used to create self-contained development environments (also called "sandboxes"). 
+
+Think of virtualenv as a completely isolated container within your computer, where you can install any version of Python and/or libraries and it won't affect anything outside that container. It's like an isolated, soundproof room within your home where you can scream as loud as you want, about anything you want, and nobody else outside that room can hear it.
+
+> I use virtualenv to experiment with other versions of Python. I do not want to upgrade my main version of Python, so I have isolated "containers" with versions of Python in them to experiment with.
+
+Install virtualenv with the following command:
+
+    $ pip install virtualenv
+
+Set up your development structure:
+    
+    $ mkdir new_project
+    $ cd new_project
+    $ virtualenv --no-site-packages env
+    
+Activate virtualenv:
+
+Unix:
+
+    $ source env/bin/activate    
+
+Windows:
+
+    $ env\scripts\activate
+
+
+You should see (env) before your prompt, `(env)$`, indicating that you're running within the 'env' virtualenv. 
+
+To exit the virtualenv, type the following command:
+
+    $ deactivate
+
+Then reactivate when you're ready to work again.
+
+Again, if you need help, please watch this [video](http://youtu.be/GBAJ7VKyEpI)
+
+### Django
+
+Finally. Let's get Django installed:
+
+    $ pip install django==1.5
+    
+You can check the version by running the following commands:
+
+    $ python
+    >>> import django
+    >>> django.get_version()
+    '1.5'
+    >>> 
+
+## Project setup
+
+Before setting up your project make sure you have virtualenv activated.
+
+### Setup Django project
+
+    $ django-admin.py startproject mysite
+
+This creates a new directory called "mysite" with the basic Django directory and structures:
+
+    ├── manage.py
+    └── mysite
+        ├── __init__.py
+        ├── settings.py
+        ├── urls.py
+        └── wsgi.py
+
+
+### Version control
+
+Before you start any developing, put your project under version control. First, add a new file called *.gitignore*, which is used to ignore unnecessary files from being added to the git repository. Add the following to the file:
+
+    .Python
+    env
+    bin
+    lib
+    include
+    .DS_Store
+    .pyc
+
+> Save this file under your "new_project" directory.
+
+Now initialize and add your files to the initial commit. If you use GitHub or BitBucket, PUSH your files to your central repo.
+
+    $ git init
+    $ git add .
+    $ git commit -m "initial commit"
+    
+### Database settings
+
+First, install MySQL-python, which is a database connector for Python:
+
+    $ pip install MySQL-python
+
+Edit your *settings.py* file within your *mysite* directory to add the following information about your database you setup earlier:
+
+    DATABASES = {
+        'default': { 
+            'ENGINE': 'django.db.backends.mysql', 
+            'NAME': 'django_db',                     
+            'USER': 'root',
+            'PASSWORD': 'your_password',
+        }
+    }      
+
+Create your database tables and set up a superuser:
+
+    $ cd mysite
+    $ python manage.py syncdb
+    Creating table auth_message
+    Creating table auth_group
+    Creating table auth_user
+    Creating table auth_permission
+    Creating table django_content_type
+    Creating table django_session
+    Creating table django_site
+
+    You just installed Django's auth system, which means you don't have any superusers defined.
+    Would you like to create one now? (yes/no): yes
+    Username: admin
+    E-mail address: your@email.com
+    Password: 
+    Password (again): 
+    Superuser created successfully.
+    Installing index for auth.Message model
+    Installing index for auth.Permission model
+    Loading 'initial_data' fixtures...
+    No fixtures found.             
+
+Launch the development server:
+
+    $ python manage.py runserver
+
+You should see the following output if Django and the database are setup correctly:
+
+    Validating models...
+
+    0 errors found
+    June 18, 2013 - 23:36:02
+    Django version 1.5, using settings 'mysite.settings'
+    Development server is running at http://127.0.0.1:8000/
+    Quit the server with CONTROL-C.
+
+Point your browser at [http://127.0.0.1:8000](http://127.0.0.1:8000) and you should see the Django "It worked!" page.
+
+### South
+
+[South](http://south.readthedocs.org/en/latest/about.html) is used for managing changes to your database tables. As your application grows, and you need to add a field to a specific table, for example, you can simply make changes to the database via data migrations with South. It makes life so much easier.
+
+Install South and then commit your new changes to git.
+
+    $ pip install south
+    
+### pip freeze
+
+Now that all your libraries are installed, use the following command to create a record of the installed libraries:
+
+    $ pip freeze > requirements.txt
+    
+This [command](http://www.pip-installer.org/en/latest/usage.html#pip-freeze) is incredibly useful if you need to recreate your project from scratch and need to know the exact libraries and subsequent versions you need to install. 
+
+### Set up your Django app
+
+Create your new app:
+
+    $ python manage.py startapp myapp
+    
+Your project structure should now look like this:
+
+    ├── manage.py
+    ├── myapp
+    │   ├── __init__.py
+    │   ├── models.py
+    │   ├── tests.py
+    │   └── views.py
+    └── mysite
+        ├── __init__.py
+        ├── settings.py
+        ├── urls.py
+        └── wsgi.py
+
+Update the INSTALLED_APPS in your *settings.py* file:
+
+    INSTALLED_APPS = (
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.sites',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'django.contrib.admin',
+        'myapp',
+        'south',
+    )
+
+> We enabled the admin, `'django.contrib.admin'`, and added your app, `'myapp'`, and `'south'`.
+
+Open *urls.py* and uncomment these three lines:
+
+    from django.contrib import admin
+    admin.autodiscover()
+    url(r'^admin/', include(admin.site.urls)),
+
+Sync your database again:
+
+    $ python manage.py syncdb
+    
+Create a database migration file with South:
+
+    $ python manage.py schemamigration myapp --initial
+    
+Migrate the database changes:
+
+    $ python manage.py migrate myapp
+
+Fire up the server (`python manage.py runserver`), and then navigate to [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin). Enter your superuser's username and password to login to the admin page.
+
+Commit to git:
+
+    $ git add .
+    $ git commit -m "updated settings, created app, added south, enabled django admin"
+    
+## Using git, the right way
+    
+> This section is fairly advanced and completely optional. If this is your first time setting up Django, you can skip this section.
+
+If you are not using GitHub or Bitbucket as a central repo, you should create a separate branch of your local repo for development.
+
+First, create a new directory called "dev" within your "new_project" directory, navigate into the newly created directory, and then clone (copy) your entire Django project:
+
+    $ git clone /path/to/your/project/
+    
+> For example: `/Users/michaelherman/desktop/new_project`
+
+This command creates an exact copy of your repo, which includes all your commits and branches. Always develop from this directory by creating separate branches for each major change to your project:
+
+    $ git branch <branchname>
+    
+Next switch to that branch:
+     
+    $ git checkout <branchname>
+    
+You can always check to see what branches are available with this command:
+
+    $ git branch
+    
+Once you are ready to commit, after you are done developing, use the following commands:
+
+    $ git add .
+    $ git commit -a
+    
+Now you want to merge your changes with the master branch:
+
+    $ git checkout master
+    $ git merge <branchname>
+    
+You can PUSH your changes to GitHub or Bitbucket if you use either service:
+
+    $ git push
+
+Finally, navigate back to your main production folder and PULL the changes:
+
+    $ git pull
+    
+**Example:**
+
+    (env)$ cd dev
+    (env)$ cd new_project
+    (env)$ git branch 06212013
+    (env)$ git checkout 06212013
+    (env)$ git add .
+    (env)$ git commit -m "description of changes made"
+    (env)$ git checkout master
+    (env)$ git merge 06212013
+    (env)$ git pull /Users/michaelherman/desktop/new_project/dev/new_project 
+
+## Workflow
+
+Now that your app is set up, follow either of these simple workflows every time you want to make changes to your app:
+
+### Basic 
+
+1. Navigate to your project
+2. Activate virtualenv
+3. Develop
+4. Commit changes
+5. Deploy
+6. Deactivate virtualenv
+
+### Advanced
+
+1. Navigate to your project
+2. Activate virtualenv
+3. Create and checkout a new git branch
+4. Develop
+5. Commit changes
+6. Merge the new branch with your master branch
+7. PULL the changes into the production folder
+8. Deploy
+9. Deactivate virtualenv
+
+
+Cheers! Any questions? Suggestions? 
+
+Let's create a basic app!
+
+## Create an App
+
+Let's create a basic, single page app that uses [markdown](http://daringfireball.net/projects/markdown/) to display text.
+
+### Setup
+
+1. With virtualenv activated, install the following package to render markdown.
+
+        $ pip install django-markdown-deux
+        
+2. Update the requirements file to include the new dependency:
+
+        $ pip freeze > requirements.txt
+
+3. Add "markdown_deux" to *settings.py*:
+
+        INSTALLED_APPS = (
+          'django.contrib.auth',
+          'django.contrib.contenttypes',
+          'django.contrib.sessions',
+          'django.contrib.sites',
+          'django.contrib.messages',
+          'django.contrib.staticfiles',
+          'django.contrib.admin',
+          'myapp',
+          'south',
+          'markdown_deux',
+        )
+
+4. Create a new directory within the "mysite" directory called "templates", and then add the relative path to the settings.py file:
+
+        TEMPLATE_DIRS = (
+        '/Users/michaelherman/desktop/new_project/mysite/templates'
+        )
+ 
+  Your project structure should look like this:
+
+        ├── manage.py
+        ├── myapp
+        │   ├── __init__.py
+        │   ├── __init__.pyc
+        │   ├── migrations
+        │   │   ├── 0001_initial.py
+        │   │   ├── 0001_initial.pyc
+        │   │   ├── __init__.py
+        │   │   └── __init__.pyc
+        │   ├── models.py
+        │   ├── models.pyc
+        │   ├── tests.py
+        │   └── views.py
+        ├── mysite
+        │   ├── __init__.py
+        │   ├── __init__.pyc
+        │   ├── settings.py
+        │   ├── settings.pyc
+        │   ├── urls.py
+        │   ├── urls.pyc
+        │   ├── wsgi.py
+        │   └── wsgi.pyc
+        └── templates
+
+## Views and URLs
+
+We will be following the [Model-View-Controller](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) (MVC) architecture structure. Django projects are logically organized around this architecture. However, Django's [architecture](https://docs.djangoproject.com/en/1.5/faq/general/#django-appears-to-be-a-mvc-framework-but-you-call-the-controller-the-view-and-the-view-the-template-how-come-you-don-t-use-the-standard-names) is slightly different in that the views act as the controllers. So, projects are actually organized in a Model-Template-Views architecture (MTV). Yes, this is confusing. 
+
+### Views
+
+Add the following code to the *views.py* file:
+
+    from django.shortcuts import render_to_response
+    from django.template import RequestContext
+  
+    def index(request):
+        return render_to_response('index.html')
+      
+This function takes a parameter, request, which is an object that has information about the user requesting the page from the browser. The function's response is to simply render the *index.html* template.
+
+### URLs
+
+Next, we need to add a new pattern to the *urls.py* file:
+
+    urlpatterns = patterns('',
+        url(r'^admin/', include(admin.site.urls)),
+        url(r'^$', 'myapp.views.index')
+    )
+
+For more information on how to generate url patters, please [view](https://docs.djangoproject.com/en/1.5/topics/http/urls/) the official Django documentation.
+
+### Templates
+
+Finally, we need to create the "index.html" template. Create a new file called *index.html* within the templates directory, and add the code found [here](https://gist.github.com/mjhea0/162db4d8a8ffa853c7f3).
+
+Fire up the server. How does that look? Let's add some styles.
+
+Replace the previous code with code [here](https://gist.github.com/mjhea0/515594fb5de9df07a7e9).
+    
+Better? 
+
+## Conclusion
+
+Finish up adding styles and content as you see fit. Then return to the workflow in the first section to finish the development process. If you need help, please visit the Real Python [forums](http://www.realpython.com/forum). Purchase [Real Python](http://www.realpython.com) or [Real Python for the Web](http://www.realpython.com) (or both!) while you're there.
+
+Let's go over the official Django [Tutorial](https://docs.djangoproject.com/en/1.5/intro/tutorial01/) (aka, the Polls tutorial) next time!
+
+Bye.
+
+{% endmarkdown %}
+  
+      <br/>
+      <br/>
+      <hr>
+      <div class="footer">
+        <p>Copyright © 2013 <a href="http://www.realpython.com">RealPython.com</a>. Developed by <a href="http://www.mherman.org">Michael Herman</a>. Powered by Django, of course.</P></p>
+      </div>
+     </div> 
+
+   </body>
+ </html>
+
+
+
+
+
+
+
+
+
+
