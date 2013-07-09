@@ -1,4 +1,1 @@
-real-django
-===========
-
-Setting up a Django Project / Django 15
+just go here - [http://realdjango.herokuapp.com/](http://realdjango.herokuapp.com/)
